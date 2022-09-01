@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 ## Test Data
 
-Download the files `inpit.bin` and `output.bin` to the same folder as the `main.py` file.
+Download the files `input.bin` and `output.bin` to the same folder as the `main.py` file.
 
 
 ## Execution
