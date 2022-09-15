@@ -41,21 +41,24 @@ def eye_correction_matrix(image_matrix):
 
     window_size = 5
 
-    for i in range(height): # process row by row
-        for j in range(width):
-            # When seeing pixel with value 1, check for eye patterns
-            if image_matrix[i, j] == 1: 
-                if i > height-window_size or j > width-window_size:
+    nonzeros = image_matrix.nonzero()
+
+    # print(nonzeros)
+
+    for (i,j) in zip(nonzeros[0], nonzeros[1]):
+        # When seeing pixel with value 1, check for eye patterns
+        if image_matrix[i, j] == 1:
+            if i > height-window_size or j > width-window_size:
+                image_matrix[i, j] = 0
+            else:
+                checked_area = image_matrix[i:i+window_size,j:j+window_size]
+                for eye_pattern in EYE_PATTERNS:
+                    if np.allclose(checked_area, eye_pattern):
+                        # If we found an eye pattern, set it to the value that needs to be subtracted
+                        checked_area *= -150
+                if image_matrix[i, j] == 1:
+                    # The pixel does not start an eye pattern, set to zero
                     image_matrix[i, j] = 0
-                else:
-                    checked_area = image_matrix[i:i+window_size,j:j+window_size]
-                    for eye_pattern in EYE_PATTERNS:
-                        if np.allclose(checked_area, eye_pattern):
-                            # If we found an eye pattern, set it to the value that needs to be subtracted
-                            checked_area *= -150
-                    if image_matrix[i, j] == 1: 
-                        # The pixel does not start an eye pattern, set to zero
-                        image_matrix[i, j] = 0 
 
     return image_matrix
 
